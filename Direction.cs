@@ -13,6 +13,8 @@ public enum HoverEnum
 
 public abstract class Direction : BaseDirection, Hittable
 {
+    #region 변수
+
     [System.Serializable]
     public class FadePattern
     {
@@ -34,6 +36,8 @@ public abstract class Direction : BaseDirection, Hittable
     protected int m_restornumber;
 
     private CoroutineCommand m_coroutine;
+
+    #endregion
 
     #region 프로퍼티
     public int Member
@@ -123,23 +127,43 @@ public abstract class Direction : BaseDirection, Hittable
 
     #region direction 사용 함수
 
+    /// <summary>
+    /// 객체에서 부모를 바꾸는 경우가 잇는데 그때 사용되는 함수.
+    /// </summary>
     public void SetParentInit()
     {
         transform.SetParent(ResourceNode);
     }
 
+    /// <summary>
+    /// effect를 지정된 객체에 붙이기 위한 함수.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="traget"></param>
     public void EffectRetrieve(string name, Transform traget)
     {
         Effect effect = AssetManager.Effect.Retrieve(name);
         effect.transform.position = traget.position;
         effect.transform.rotation = traget.rotation;
     }
+
+    /// <summary>
+    /// effect를 지정된 위치에 만들기 위한 함수.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="traget"></param>
     public void EffectRetrieve(string name, Vector3 traget)
     {
         Effect effect = AssetManager.Effect.Retrieve(name);
         effect.transform.position = traget;
     }
 
+    /// <summary>
+    /// FadeIn을 위한 corutine 함수
+    /// </summary>
+    /// <param name="m_fade"></param>
+    /// <param name="m_realmat"></param>
+    /// <param name="m_original"></param>
     public void PlayFadeIn(FadePattern m_fade, Material m_realmat, Direction m_original)
     {
         m_original.m_finish = false;
@@ -147,19 +171,27 @@ public abstract class Direction : BaseDirection, Hittable
         m_coroutine = CoroutineManager.Instance.Register(Playfadein(m_fade, m_realmat, m_original));
     }
 
+    /// <summary>
+    /// FadeOut을 위한 courutine실행 함수
+    /// </summary>
+    /// <param name="m_fade"></param>
+    /// <param name="m_original"></param>
     public void PlayFadeOut(FadePattern m_fade, Direction m_original)
     {
         m_original.m_finish = false;
 
         m_coroutine = CoroutineManager.Instance.Register(PlayFadeout(m_fade, m_original));
     }
-
-    //public IEnumerator<CoroutinePhase> Emergency(DirectionHoverPattern direction, float time)
-    //{
-    //    yield return Suspend.Do(time);
-    //    direction.Active();
-    //}
     
+    /// <summary>
+    /// 유저가 일정된 시간 동안 탑승을 하지 않았을 경우 진행을 위해서 오브젝트를 강제로 움직인다.
+    /// 주로 호버보드 탑승의 경우에 유저가 타지 못해서 진행이 안 될 경우를 위해서 가동시킨다.
+    /// 먼저 유저가 타서 작동되면 코루틴은 꺼지게 되어있다.
+    /// </summary>
+    /// <param name="time"></param>
+    /// <param name="bothMember"></param>
+    /// <param name="direction"></param>
+    /// <returns></returns>
     public IEnumerator<CoroutinePhase> Emergency(float time, bool bothMember, Direction direction = null)
     {
         yield return Suspend.Do(time);
@@ -185,6 +217,11 @@ public abstract class Direction : BaseDirection, Hittable
         }
     }
 
+    /// <summary>
+    /// 지정된 시간 후에 오브젝트가 유저의 눈에 보이지 않는 대기 상태로 바꾼다.
+    /// </summary>
+    /// <param name="time"></param>
+    /// <param name="m_direction"></param>
     protected void Directionrestor(float time, Direction m_direction)
     {
         m_coroutine = CoroutineManager.Instance.Register(DirectionRestore(time, m_direction));

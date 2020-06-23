@@ -67,6 +67,12 @@ public class DirectionCountCheck : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 유저가 호버보드에 탑승했는지 여부를 판단한다.
+    /// 유저가 탑승할 수 있는 위치가 정해져 있는데 그 부분에 맞게 탑승했을 경우
+    /// 이펙트가 발생하면서 유저가 탑승했는지 여부를 상위 개체에 알려준다.
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other) 
     {
         if (GameData.Instance.UserType == UserType.Host) return;
@@ -97,6 +103,11 @@ public class DirectionCountCheck : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 유저가 호버트에서 탑승 상태에서 벗어날 경우 이펙트를 실행하고
+    /// 상위개체에 나간 사실을 알려준다.
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerExit(Collider other)
     {
         if (GameData.Instance.UserType == UserType.Host) return;

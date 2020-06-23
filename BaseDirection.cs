@@ -2,6 +2,7 @@
 
 public abstract class BaseDirection : CachedAsset
 {
+    #region 변수
     public virtual void OnExit(GameObject camerairg, int number) { }
     public virtual void OnFall(GameObject camerarig) { }
     public virtual void Hit(Vector3 hitPoint, float damage, HitType hittype = HitType.NONE, bool isWeakPoint = false) { }
@@ -14,6 +15,8 @@ public abstract class BaseDirection : CachedAsset
     protected bool m_active;
     protected bool m_activeend;
 
+    private Quaternion m_rot;
+    #endregion
     #region 프로퍼티
 
     public bool Active
@@ -35,9 +38,12 @@ public abstract class BaseDirection : CachedAsset
     }
 
     #endregion
-
-    private Quaternion m_rot;
-
+    /// <summary>
+    /// 개체 생성전의 초기화 구문
+    /// 개체를 지정된 위치나 Transform객체에 붙인다.
+    /// 상속된 개체의 초기화가 이때 진행된다.
+    /// </summary>
+    /// <param name="parameters"></param>
     internal override void OnInitialize(params object[] parameters)
     {
         m_rot = transform.rotation;
@@ -60,6 +66,9 @@ public abstract class BaseDirection : CachedAsset
         DirectingOnInitialize(parameters);
     }
 
+    /// <summary>
+    /// 오브젝트 사용이 끝나서 유저 눈에 안 보이게 바꾸어 준다.
+    /// </summary>
     protected override void OnRestore()
     {
         if (gameObject == null || !gameObject.activeSelf)
@@ -77,6 +86,10 @@ public abstract class BaseDirection : CachedAsset
         gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// 객체가 초기화가 끝나고 유저 눈에 보이면서 오브젝트가 움직이게 한다.
+    /// 상속된 개체에 지정된 setting이 이때 실행된다.
+    /// </summary>
     protected override void OnUse()
     {
         gameObject.SetActive(true);

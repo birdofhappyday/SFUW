@@ -12,7 +12,7 @@ public class DirectionJormun : Direction
         m_active = false;
     }
 
-    protected override void Directingsetting()
+    protected override void Directingsetting() // 요루문에 우주선 지붕이 붙어있는데 그 객체를 일단 꺼주고 나중에 애니메이터에서 켜준다.
     {
         hoverCeiling.SetActive(false);
 
@@ -21,7 +21,7 @@ public class DirectionJormun : Direction
         DirectionManager.Instance.OpenNarration(5005);
     }
 
-    private void OnEnable()
+    private void OnEnable()  //등장시 행동 설정(사운드만 설정되어 있다.)
     {
         AssetManager.Effect.Retrieve("DirectionSound_BuildingJormunAppear", transform);
     }
@@ -49,7 +49,7 @@ public class DirectionJormun : Direction
         AssetManager.Effect.Retrieve("DirectionSound_DetachShildJormunSound", transform);
     }
 
-    public void JormunEndSound()
+    public void JormunEndSound() // 요루문이 죽을 때 나는 사운드
     {
         AssetManager.Effect.Retrieve("DirectionSound_JormunOff", transform);
     }
@@ -57,7 +57,7 @@ public class DirectionJormun : Direction
 
     #region Coroutine
 
-    private IEnumerator JormunEnding()
+    private IEnumerator JormunEnding() //요루문이 지정된 애니메이션 호출 후 사라진다.
     {
         yield return new WaitForSeconds(6f);
 
