@@ -123,6 +123,20 @@ public abstract class Direction : BaseDirection, Hittable
 
     public virtual void DirectionBoarding() { }
 
+    public virtual void HitEvent(Vector3 hitPoint, float damage)
+    {
+        JObject directionHitPacket = new JObject();
+        directionHitPacket.Add("type", (int)DirectionState.Hit);
+        directionHitPacket.Add("id", m_directionid);
+        directionHitPacket.Add("damage", damage);
+
+        Network.Instance.SendTCP("direction packet", directionHitPacket);
+    }
+
+    public virtual void HitFromServer(float nDamage, Vector3 hitPosition)
+    {
+    }
+
     #endregion
 
     #region direction 사용 함수
@@ -324,20 +338,6 @@ public abstract class Direction : BaseDirection, Hittable
     {
         if (GameData.Instance.UserType == UserType.Host) return;
         HitEvent(hitPoint, damage);
-    }
-
-    public virtual void HitEvent(Vector3 hitPoint, float damage)
-    {
-        JObject directionHitPacket = new JObject();
-        directionHitPacket.Add("type",      (int)DirectionState.Hit);
-        directionHitPacket.Add("id",        m_directionid);
-        directionHitPacket.Add("damage",    damage);
-
-        Network.Instance.SendTCP("direction packet", directionHitPacket);
-    }
-
-    public virtual void HitFromServer(float nDamage, Vector3 hitPosition)
-    {
     }
 
     #endregion
