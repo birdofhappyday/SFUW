@@ -80,15 +80,6 @@ public abstract class Direction : BaseDirection, Hittable
         base.OnRestore();        
     }
 
-    public virtual void OnEnter(GameObject camerarig, int number, CameraDirection eyechild = null)
-    {
-        if (-1 != number)
-        {
-            SendDirectionCheckActive(number, true);
-        }
-        SendDirectionCountData(1);
-    }
-
     public override void OnExit(GameObject camerarig, int number)
     {
         if (-1 != number)
@@ -104,6 +95,15 @@ public abstract class Direction : BaseDirection, Hittable
     {
         transform.position = tr.position;
         transform.rotation = tr.rotation;
+    }
+
+    public virtual void OnEnter(GameObject camerarig, int number, CameraDirection eyechild = null)
+    {
+        if (-1 != number)
+        {
+            SendDirectionCheckActive(number, true);
+        }
+        SendDirectionCountData(1);
     }
 
     public virtual void Countcheck() { }
